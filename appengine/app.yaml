@@ -1,8 +1,8 @@
 application: election-gadgets
-version: 1
+version: egypt
 runtime: python
 api_version: 1
 
 handlers:
-- url: /.*voter-info-gadget\.xml
+- url: /.*voter-info-gadget-egypt\.xml
   script: voter-info-gadget.py
