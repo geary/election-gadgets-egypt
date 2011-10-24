@@ -32,7 +32,7 @@ class GadgetHandler( webapp.RequestHandler ):
 	def get( self, dump, debug ):
 		self.response.headers['Content-Type'] = 'application/xml'
 		if debug == None: debug = ''
-		f = open( 'voter-info-gadget.xml', 'r' )
+		f = open( 'voter-info-gadget-egypt.xml', 'r' )
 		xml = f.read()
 		f.close()
 		xml = xml.replace( '{{debug}}', debug )  # poor man's template
@@ -41,7 +41,7 @@ class GadgetHandler( webapp.RequestHandler ):
 		self.response.out.write( xml )
 
 application = webapp.WSGIApplication([
-	( r'/(dump-)?(.+)?voter-info-gadget\.xml', GadgetHandler )
+	( r'/(dump-)?(.+)?voter-info-gadget-egypt\.xml', GadgetHandler )
 ], debug = True )
 
 def main():
