@@ -42,6 +42,7 @@
 <!--:: gadgetStyle ::-->
 
 <style type="text/css">
+    body { direction: {{BIDI_DIR}}; }
     body.gadget { margin:0; padding:0; }
     body, body td { {{fontStyle}} }
     /*body { height:{{height}}px; }*/
@@ -108,7 +109,7 @@
           <input type="text" id="Poll411Input" class="example" onfocus="Poll411.focus()" onblur="Poll411.blur()"> 
         </td> 
         <td id="Poll411ButtonCell"> 
-          <button type="submit" id="Poll411Button"> Search</button> 
+          <button type="submit" id="Poll411Button">{{search}}</button> 
         </td> 
       </tr> 
     </table> 
