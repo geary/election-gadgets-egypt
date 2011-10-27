@@ -32,6 +32,10 @@ function attribution() {
 	return T( 'attribution' );
 }
 
+function stateLocator() {
+	return '';
+}
+
 function locationWarning() {
 	return vote.locations && vote.locations.length ?
 		T('locationWarning') :
@@ -245,6 +249,10 @@ function formatLocations( locations, info, icon, title, infowindow, extra, mappe
 	);
 }
 
+function formatHome() {
+	return '';
+}
+
 // Set up map and sidebar when the polling place location is known
 function setVoteGeo( places, address, location) {
 	//if( places && places.length == 1 ) {
@@ -328,21 +336,12 @@ function fixInputAddress( addr ) {
 
 // Geocoding and Election Center API
 
-function lookupPollingPlace( inputAddress, info, callback ) {
-	function ok( poll ) { return poll.status == 'SUCCESS'; }
-	function countyAddress() {
-		return S( info.street, ', ', info.county, ', ', info.state.abbr, ' ', info.zip );
-	}
-	pollingApi( info.place.formatted_address, function( poll ) {
-		if( ok(poll) )
-			callback( poll );
-		else
-			pollingApi( inputAddress, callback );
-	});
+function lookupPollingPlace( voterID, callback ) {
+	pollingApiIdProxy( voterID, callback );
 }
 
-function findPrecinct( place, inputAddress ) {
-	lookupPollingPlace( inputAddress, home.info, function( poll ) {
+function findPrecinct( dummy, voterID ) {
+	lookupPollingPlace( voterID, function( poll ) {
 		log( 'API status code: ' + poll.status || '(OK)' );
 		vote.poll = poll;
 		var norm = poll.normalized_input;

@@ -828,6 +828,26 @@ function pollingApi( address, callback, options ) {
 		options.noaddress ? 'nofulladdress&' : '',
 		'q=', encodeURIComponent(address)
 	);
+	pollingApiUrl( url, callback );
+}
+
+// TODO: refactor
+function pollingApiIdProxy( id, callback, options ) {
+	options = options || {};
+	if( ! id ) {
+		callback({ status:'ERROR' });
+		return;
+	}
+	var electionId = options.electionId || pref.electionId;
+	var url = S(
+		'http://pollinglocation.apis.google.com/proxy?',
+		electionId ? 'electionid=' + electionId + '&' : '',
+		'nid=', encodeURIComponent(id)
+	);
+	pollingApiUrl( url, callback );
+}
+
+function pollingApiUrl( url, callback ) {
 	log( 'Polling API:' );  log( url );
 	$.ajax( url, {
 		cache: true,
@@ -1026,14 +1046,11 @@ function forceDetails() {
 
 // Return the HTML for basic election info
 function sorryHtml() {
-	return home && home.info ? S(
+	return S(
 		'<div>',
 			formatHome(),
 			stateLocator(),
 			electionInfo(),
-		'</div>'
-	) : S(
-		'<div>',
 		'</div>'
 	);
 }
