@@ -43,12 +43,12 @@ function locationWarning() {
 }
 
 function electionInfo() {
-	var elections = [];
 	return S(
-		generalInfo(),
-		elections.join(''),
-		infoLinks(),
-		attribution()
+		//generalInfo(),
+		contestInfo(),
+		//infoLinks(),
+		//attribution(),
+		''
 	);
 }
 
@@ -59,66 +59,56 @@ function generalInfo() {
 	);
 }
 
-function perElectionInfo( state, electionDay, electionName ) {
-	
-	var cands = candidates();
-	return cands ? S(
-		'<div style="margin-bottom:0.5em;">',
-			'<div class="heading" style="margin:0.75em 0;">',
-				formatDate(electionDay), ' ', electionName,
-			'</div>',
-			cands,
+function contestInfo( ) {
+	var contests = getContests();
+	if( ! contests ) return '';
+	//contests = sortArrayBy( contests, 'ballot_placement', { numeric:true } );
+	//var randomize = contests[0].ballot.candidate[0].order_on_ballot == null;
+	//var randomizedMessage = ! randomize ? '' : S(
+	//	'<div style="font-size:85%; font-style:italic; margin-top:0.5em">',
+	//		T('candidateRandomOrder'),
+	//	'</div>'
+	//);
+	return S(
+		'<div>',
+			//randomizedMessage,
+			contests.mapjoin( function( contest ) {
+				//var candidates = contest.ballot.candidate;
+				//candidates = randomize ?
+				//	candidates.randomized() :
+				//	sortArrayBy( candidates, 'order_on_ballot', { numeric:true } );
+					
+				return S(
+					'<div class="heading" style="font-size:150%;">',
+						contest.type,
+					'</div>',
+					'<div class="heading" style="font-size:125%;">',
+						contest.constituency,
+					'</div>'//,
+					//candidates.mapjoin( function( candidate ) {
+					//	function party() {
+					//		return candidate.party ? S(
+					//			'<span style="color:#444; font-size:85%;">',
+					//				' - ',
+					//				candidate.party,
+					//			'</span>'
+					//		) : '';
+					//	}
+					//	return S(
+					//		'<div>',
+					//			linkIf( candidate.name, candidate.candidate_url ),
+					//			party(),
+					//		'</div>'
+					//	);
+					//})
+				);
+			}),
 		'</div>'
-	) : '';
-	
-	function candidates() {
-		var contests = getContests();
-		if( ! contests ) return '';
-		contests = sortArrayBy( contests, 'ballot_placement', { numeric:true } );
-		var randomize = contests[0].ballot.candidate[0].order_on_ballot == null;
-		var randomizedMessage = ! randomize ? '' : S(
-			'<div style="font-size:85%; font-style:italic; margin-top:0.5em">',
-				T('candidateRandomOrder'),
-			'</div>'
-		);
-		return S(
-			'<div>',
-				randomizedMessage,
-				contests.mapjoin( function( contest ) {
-					var candidates = contest.ballot.candidate;
-					candidates = randomize ?
-						candidates.randomized() :
-						sortArrayBy( candidates, 'order_on_ballot', { numeric:true } );
-						
-					return S(
-						'<div class="heading" style="xfont-size:110%; margin-top:0.5em">',
-							contest.office,
-						'</div>',
-						candidates.mapjoin( function( candidate ) {
-							function party() {
-								return candidate.party ? S(
-									'<span style="color:#444; font-size:85%;">',
-										' - ',
-										candidate.party,
-									'</span>'
-								) : '';
-							}
-							return S(
-								'<div>',
-									linkIf( candidate.name, candidate.candidate_url ),
-									party(),
-								'</div>'
-							);
-						})
-					);
-				}),
-			'</div>'
-		);
-	}
+	);
 }
 
 function setVoteHtml() {
-	if( !( vote.info || vote.locations ) ) {
+	if( !( vote.info || vote.locations || vote.poll ) ) {  // TODO
 		$details.append( log.print() );
 		return;
 	}
@@ -152,10 +142,10 @@ function setVoteHtml() {
 	vote.html = infoWrap( S(
 		log.print(),
 		electionHeader(),
-		homeAndVote()//,
-		//'<div style="padding-top:1em">',
-		//'</div>',
-		//electionInfo()
+		homeAndVote(),
+		'<div style="padding-top:1em">',
+		'</div>',
+		electionInfo()
 	) );
 	vote.htmlInfowindow = infoWrap( S(
 		log.print(),
@@ -195,7 +185,9 @@ function setVoteHtml() {
 		return T( 'longInfo', {
 			log: log.print(),
 			header: electionHeader(),
+			home: '',
 			location: voteLocation(),
+			stateLocator: '',
 			warning: locationWarning(),
 			info: electionInfo()
 		});
@@ -203,7 +195,7 @@ function setVoteHtml() {
 }
 
 function getContests() {
-	var contests = vote && vote.poll && vote.poll.contests && vote.poll.contests[0];
+	var contests = vote && vote.poll && vote.poll.contests;
 	return contests && contests.length && contests;
 }
 
@@ -344,32 +336,32 @@ function findPrecinct( dummy, voterID ) {
 	lookupPollingPlace( voterID, function( poll ) {
 		log( 'API status code: ' + poll.status || '(OK)' );
 		vote.poll = poll;
-		var norm = poll.normalized_input;
-		var locations = vote.locations = poll.locations && poll.locations[0];
-		if( poll.status != 'SUCCESS'  ||  ! locations  ||  ! locations.length ) {
+		if( poll.status != 'SUCCESS' ) {
 			sorry();
 			return;
 		}
-		if( locations.length > 1 ) {
-			log( 'Multiple polling locations' );
-			setVoteNoGeo();
-			return;
-		}
-		var location = locations[0], address = location.address;
-		if(
-			( address.line1 || address.line2 )  &&
-			( ( address.city && address.state ) || address.zip )
-		) {
-			var addr = oneLineAddress( address );
-			log( 'Polling address:', addr );
-			geocode( addr, function( places ) {
-				setVoteGeo( places, addr, location );
-			});
-		}
-		else {
-			log( 'No polling address' );
-			setVoteNoGeo();
-		}
+		//var locations = vote.locations = poll.locations;
+		//if( locations.length > 1 ) {
+		//	log( 'Multiple polling locations' );
+		//	setVoteNoGeo();
+		//	return;
+		//}
+		//var location = locations[0], address = location.address;
+		//if(
+		//	( address.line1 || address.line2 )  &&
+		//	( ( address.city && address.state ) || address.zip )
+		//) {
+		//	var addr = oneLineAddress( address );
+		//	log( 'Polling address:', addr );
+		//	geocode( addr, function( places ) {
+		//		setVoteGeo( places, addr, location );
+		//	});
+		//}
+		//else {
+		//	log( 'No polling address' );
+		//	setVoteNoGeo();
+		//}
+		setVoteNoGeo();
 	});
 }
 
