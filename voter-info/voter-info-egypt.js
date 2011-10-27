@@ -21,6 +21,7 @@ if( ! supportedLanguages[pref.lang] )
 	pref.lang = defaultLanguage;
 
 function localPrefs( pref ) {
+	pref.voterIdElection = true;
 }
 
 var initialBbox = [ 22.6066970, 21.61291460, 38.9982990, 31.79954240 ];

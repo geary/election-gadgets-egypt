@@ -400,7 +400,10 @@ var fontStyle = S( 'font-family:', escape(pref.fontFamily), '; font-size:', pref
 function loadStrings( strings ) {
 	pref.strings = strings;
 	
-	T.variables = $.extend( strings, {
+	if( pref.voterIdElection )
+		pref.homePrompt = pref.strings.voterIdPrompt;
+	
+	T.variables = $.extend( {}, opt, strings, {
 		width: winWidth() - 8,
 		height: winHeight() - 80,
 		heightFull: winHeight(),
@@ -543,9 +546,9 @@ function tabLinks( active ) {
 		});
 	}
 	return T( 'tabLinks', {
-		tab1: tab( '#detailsbox', 'Details' ),
-		tab2: includeMap() ? tab( '#mapbox', 'Map' ) : '',
-		tab3: pref.ready ? '' : tab( '#Poll411Gadget', 'Search' )
+		tab1: tab( '#detailsbox', T('details') ),
+		tab2: includeMap() ? tab( '#mapbox', T('map') ) : '',
+		tab3: pref.ready ? '' : tab( '#Poll411Gadget', T('search') )
 	});
 }
 
