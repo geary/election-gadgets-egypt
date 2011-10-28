@@ -839,9 +839,14 @@ function pollingApiIdProxy( id, callback, options ) {
 		return;
 	}
 	var electionId = options.electionId || pref.electionId;
+	//var url = S(
+	//	'http://pollinglocation.apis.google.com/proxy?',
+	//	electionId ? 'electionid=' + electionId + '&' : '',
+	//	'nid=', encodeURIComponent(id)
+	//);
+	// TEMP:
 	var url = S(
-		'http://pollinglocation.apis.google.com/proxy?',
-		electionId ? 'electionid=' + electionId + '&' : '',
+		'http://178.79.173.29:9393/election?',
 		'nid=', encodeURIComponent(id)
 	);
 	pollingApiUrl( url, callback );
