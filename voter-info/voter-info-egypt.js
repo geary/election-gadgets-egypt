@@ -225,12 +225,9 @@ function formatLocations( locations, info, icon, title, infowindow, extra, mappe
 	var rows = info ?
 		[ formatLocationRow(info) ] :
 		locations.map( function( location ) {
-			var a = location.address;
 			return formatLocationRow({
-				location: a && a.location_name || '',
-				directions: location.directions || '',
-				hours: location.pollinghours || '',
-				address: a
+				address: location.unparsed_address,
+				location: location.name || ''
 			});
 		});
 	
@@ -270,15 +267,22 @@ function setVoteGeo( places, address, location) {
 		//}
 		try {
 			var place = places[0];
-			if( location.latitude && location.longitude )
+			if( location.lat && location.lng )
 				place.geometry.location =
-					new gm.LatLng( location.latitude, location.longitude );
+					new gm.LatLng( location.lat, location.lng );
 		}
 		catch( e ) {
 			log( 'Error getting polling state' );
 		}
 		log( 'Getting polling place map info' );
-		setMap( vote.info = mapInfo( place, vote.locations[0] ) );
+		vote.info = {
+			place: place,
+			address: location.unparsed_address,
+			latlng: place.geometry.location,
+			location: location.name,
+			_:''
+		};
+		setMap( vote.info  );
 		return;
 	}
 	setVoteNoGeo();
@@ -333,40 +337,39 @@ function fixInputAddress( addr ) {
 
 // Geocoding and Election Center API
 
-function lookupPollingPlace( voterID, callback ) {
-	pollingApiIdProxy( voterID, callback );
-}
-
 function findPrecinct( dummy, voterID ) {
-	lookupPollingPlace( voterID, function( poll ) {
+	pollingApiIdProxy( voterID, function( poll ) {
 		log( 'API status code: ' + poll.status || '(OK)' );
 		vote.poll = poll;
 		if( poll.status != 'SUCCESS' ) {
 			sorry();
 			return;
 		}
-		//var locations = vote.locations = poll.locations;
-		//if( locations.length > 1 ) {
-		//	log( 'Multiple polling locations' );
-		//	setVoteNoGeo();
-		//	return;
-		//}
-		//var location = locations[0], address = location.address;
-		//if(
-		//	( address.line1 || address.line2 )  &&
-		//	( ( address.city && address.state ) || address.zip )
-		//) {
-		//	var addr = oneLineAddress( address );
-		//	log( 'Polling address:', addr );
-		//	geocode( addr, function( places ) {
-		//		setVoteGeo( places, addr, location );
-		//	});
-		//}
-		//else {
-		//	log( 'No polling address' );
-		//	setVoteNoGeo();
-		//}
-		setVoteNoGeo();
+		var locations = vote.locations = poll.locations;
+		if( ! locations  ||  ! locations.length ) {
+			log( 'No polling locations' );
+			setVoteNoGeo();
+			return;
+		}
+		if( locations.length > 1 ) {
+			log( 'Multiple polling locations' );
+			setVoteNoGeo();
+			return;
+		}
+		var loc = locations[0];
+		var addr =
+			loc.lat && loc.lng ? [ loc.lat, loc.lng ].join(',') :
+			loc.unparsed_address;
+		if( addr ) {
+			log( 'Polling address:', addr );
+			geocode( addr, function( places ) {
+				setVoteGeo( places, addr, loc );
+			});
+		}
+		else {
+			log( 'No polling address' );
+			setVoteNoGeo();
+		}
 	});
 }
 
