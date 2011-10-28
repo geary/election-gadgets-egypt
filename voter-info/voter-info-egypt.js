@@ -52,6 +52,13 @@ function electionInfo() {
 	);
 }
 
+function electionHeader() {
+	return S(
+		'<div style="font-weight:bold;">',
+		'</div>'
+	);
+}
+
 function generalInfo() {
 	return S(
 		'<div style="margin-bottom:0.5em;">',
@@ -182,12 +189,10 @@ function setVoteHtml() {
 	}
 	
 	function longInfo() {
-		return T( 'longInfo', {
+		return T( 'longInfoEgypt', {
 			log: log.print(),
 			header: electionHeader(),
-			home: '',
 			location: voteLocation(),
-			stateLocator: '',
 			warning: locationWarning(),
 			info: electionInfo()
 		});
