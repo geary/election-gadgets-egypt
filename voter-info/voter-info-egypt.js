@@ -24,7 +24,8 @@ function localPrefs( pref ) {
 	pref.voterIdElection = true;
 }
 
-var initialBbox = [ 22.6066970, 21.61291460, 38.9982990, 31.79954240 ];
+// [ W, S, E, N ]
+var initialBbox = [ 25.0, 22.0, 36.9, 31.6 ];
 
 // Output formatters
 
