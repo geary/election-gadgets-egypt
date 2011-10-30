@@ -11,7 +11,7 @@
     screenshot=""
     title_url=""
     width="740"
-    height="520">
+    height="640">
   <Locale lang="ar" language_direction="rtl" />
   <Locale lang="en"/>
   <Require feature="analytics"/>
