@@ -346,7 +346,7 @@ function analytics( path ) {
 		path = ( maker ? '/creator/' : pref.onebox ? '/onebox/' : inline ? '/inline/' : '/gadget/' ) + fixHttp(path);
 		path = '/' + fixHttp(document.referrer) + '/' + path;
 		//console.log( 'analytics', path );
-		_IG_Analytics( 'UA-5730550-1', path );
+		_IG_Analytics( pref.analyticsUA, path );
 	}
 }
 
@@ -375,6 +375,7 @@ for( var name in prefInit )
 	pref[name] = prefs.getString(name) || prefInit[name];
 
 pref.ready = prefs.getBool('submit');
+pref.analyticsUA = 'UA-5730550-1';
 
 // Override prompt
 //pref.homePrompt = 'We are not supporting any current elections. Click the *Search* button for a demo of this app:';

@@ -22,6 +22,7 @@ if( ! supportedLanguages[pref.lang] )
 
 function localPrefs( pref ) {
 	pref.voterIdElection = true;
+	pref.analyticsUA = 'UA-26399777-1';
 }
 
 // [ W, S, E, N ]
