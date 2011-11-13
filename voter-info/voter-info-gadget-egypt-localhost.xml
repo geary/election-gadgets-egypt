@@ -2,16 +2,18 @@
 <Module>
 
 <ModulePrefs
-    title="Google Election Center app for Egypt on localhost"
-    description="Enter your home address to find your voter registration information, voting location and more. Embed this app on your website or blog to help others find this important information."
+    title="جوجل التطبيق مركز انتخاب لمصر (localhost)"
+    description=""
     author="Google, Inc."
     author_affiliation="Google, Inc."
     author_email="elections@google.com"
-    thumbnail="http://election-gadgets.googlecode.com/hg/voter-info/voter-info-gadget-thumbnail.png"
-    screenshot="http://election-gadgets.googlecode.com/hg/voter-info/voter-info-gadget-screenshot.png"
-    title_url="http://maps.google.com/vote"
-    width="620"
-    height="480">
+    thumbnail=""
+    screenshot=""
+    title_url=""
+    width="740"
+    height="640">
+  <Locale lang="ar" language_direction="rtl" />
+  <Locale lang="en"/>
   <Require feature="analytics"/>
 </ModulePrefs>
 
@@ -54,15 +56,7 @@
 	<EnumValue value="px" display_value="Pixels (px)"/>
 </UserPref>
 
-<UserPref name="homePrompt" datatype="string" display_name="Addr Prompt" default_value="Get your voter info! Enter the *full home address* where you&#8217;re registered to vote, including city and state:"/>
-
-<UserPref name="example" datatype="string" display_name="Example&#160;Addr" default_value="Ex: 1600 Pennsylvania Ave, Washington DC"/>
-
-<UserPref name="submit" datatype="bool" display_name="Preload&#160;Addr" default_value=""/>
-
 <UserPref name="electionId" datatype="string" display_name="Election&#160;ID" default_value=""/>
-
-<!--<UserPref name="logo" datatype="string" display_name="Logo&#160;URL" default_value=""/>-->
 
 <Content type="html">
 <![CDATA[
