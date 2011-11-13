@@ -31,7 +31,7 @@ var initialBbox = [ 25.0, 22.0, 36.9, 31.6 ];
 // Output formatters
 
 function attribution() {
-	return T( 'attribution' );
+	return T( 'attributionEG' );
 }
 
 function stateLocator() {
@@ -49,7 +49,7 @@ function electionInfo() {
 		//generalInfo(),
 		contestInfo(),
 		//infoLinks(),
-		//attribution(),
+		attribution(),
 		''
 	);
 }
