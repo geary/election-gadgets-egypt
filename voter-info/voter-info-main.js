@@ -859,7 +859,18 @@ function pollingApiUrl( url, callback ) {
 		jsonp: 'jsonp',
 		jsonpCallback: 'pollingApiCallback',
 		success: function( poll ) {
-			 callback( typeof poll == 'object' ? poll : { status:"ERROR" } );
+			if( typeof poll != 'object' )
+				poll = {
+					status: 'REQUEST_FAILED',
+					error: { code: -1, debug_message: 'Null API result' }
+				};
+			if( poll.status == 'REQUEST_FAILED' ) {
+				log( S( 'API failed, error ', poll.error.code, ':' ) );
+				log( poll.error.debug_message );
+				sorryApiFailed( poll );
+				return;
+			}
+			 callback( poll );
 		}
 	});
 }
@@ -1033,7 +1044,17 @@ function detailsOnly( html ) {
 // Display only basic information for an election, whatever is
 // available without a specific address
 function sorry() {
-	$details.html( log.print() + sorryHtml() );
+	detailsOnlyMessage( sorryHtml() );
+}
+
+// Display error when the API failed
+function sorryApiFailed( poll ) {
+	detailsOnlyMessage( T('apiFailed') + attribution() );
+}
+
+// Force details view with a message
+function detailsOnlyMessage( message ) {
+	$details.html( S( log.print(), '<div>', message, '</div>' ) );
 	forceDetails();
 }
 
