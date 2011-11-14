@@ -374,7 +374,7 @@ function findPrecinct( dummy, voterID ) {
 		}
 	},
 	{
-		electionId: -100
+		electionId: 2500
 	});
 }
 
