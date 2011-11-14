@@ -65,7 +65,7 @@
 	
 	var opt = {
 		// Change the debug path as needed - use your own hostname and path
-		debug: 'localhost/election-gadgets/hg/voter-info/',
+		debug: 'localhost/election-gadgets/egypt/voter-info/',
 		codeUrl: 'http://election-gadgets.googlecode.com/hg/voter-info/',
 		gadgetUrl: 'http://election-gadgets.googlecode.com/hg/voter-info/voter-info-gadget-egypt.xml',
 		localJS: 'voter-info-egypt.js',
