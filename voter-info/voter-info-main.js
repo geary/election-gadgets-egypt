@@ -26,6 +26,14 @@ $.fn.visibleWidth = function() {
 	return this.is(':visible') ? this.width() : 0;
 };
 
+// Convert a plain text string into HTML code representing that text,
+// e.g. "<div>" becomes "&lt;div&gt;"
+function htmlEscape( text ) {
+	var div = document.createElement( 'div' );
+	div.appendChild( document.createTextNode(text) );
+	return div.innerHTML;
+}
+
 var GoogleElectionMap = {};
 
 // Code and data normally both come from the same place, except
@@ -396,7 +404,7 @@ var maker = decodeURIComponent(location.href).indexOf('source=http://www.gmodule
 // Set up {{foo}} variables for T().
 // T.variables includes pref.strings and other values set up here.
 
-var fontStyle = S( 'font-family:', escape(pref.fontFamily), '; font-size:', pref.fontSize, pref.fontUnits, '; ' );
+var fontStyle = S( 'font-family:', htmlEscape(unescape(pref.fontFamily)), '; font-size:', pref.fontSize, pref.fontUnits, '; ' );
 
 function loadStrings( strings ) {
 	pref.strings = strings;
