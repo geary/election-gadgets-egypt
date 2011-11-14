@@ -39,9 +39,7 @@ function stateLocator() {
 }
 
 function locationWarning() {
-	return vote.locations && vote.locations.length ?
-		T('locationWarning') :
-		'';
+	return '';
 }
 
 function electionInfo() {
