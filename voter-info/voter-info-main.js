@@ -823,6 +823,8 @@ function isGeocodeAccurate( place ) {
 	return type == 'ROOFTOP' || type == 'RANGE_INTERPOLATED';
 }
 
+var pollingApiBaseURL = 'https://pollinglocation.googleapis.com/';
+
 // Call the polling location API for an address and call the callback
 function pollingApi( address, callback, options ) {
 	options = options || {};
@@ -832,7 +834,7 @@ function pollingApi( address, callback, options ) {
 	}
 	var electionId = options.electionId || pref.electionId;
 	var url = S(
-		'http://pollinglocation.apis.google.com/?api_version=1.1&',
+		pollingApiBaseURL, '?api_version=1.1&',
 		electionId ? 'electionid=' + electionId + '&' : '',
 		options.noaddress ? 'nofulladdress&' : '',
 		'q=', encodeURIComponent(address)
@@ -849,7 +851,7 @@ function pollingApiIdProxy( id, callback, options ) {
 	}
 	var electionId = pref.electionId || options.electionId;
 	var url = S(
-		'http://pollinglocation.apis.google.com/proxy?',
+		pollingApiBaseURL, 'proxy?',
 		electionId ? 'electionid=' + electionId + '&' : '',
 		'nid=', encodeURIComponent(id)
 	);
