@@ -372,6 +372,9 @@ function findPrecinct( dummy, voterID ) {
 			log( 'No polling address' );
 			setVoteNoGeo();
 		}
+	},
+	{
+		electionId: -100
 	});
 }
 

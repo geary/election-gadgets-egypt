@@ -839,10 +839,7 @@ function pollingApiIdProxy( id, callback, options ) {
 		callback({ status:'ERROR' });
 		return;
 	}
-	var electionId = options.electionId || pref.electionId;
-	// TEMP
-	electionId = -100;
-	// END TEMP
+	var electionId = pref.electionId || options.electionId;
 	var url = S(
 		'http://pollinglocation.apis.google.com/proxy?',
 		electionId ? 'electionid=' + electionId + '&' : '',
