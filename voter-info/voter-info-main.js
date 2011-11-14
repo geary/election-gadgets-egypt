@@ -660,7 +660,7 @@ function formatWaypoint( name, info ) {
 // Load the Maps API and when it's ready create the Map object
 function initMap( go ) {
 	google.load( 'maps', '3', {
-		other_params: 'sensor=false',
+		other_params: 'sensor=false&language=' + pref.lang,
 		callback: function() {
 			gm = google.maps;
 			gme = gm.event;
