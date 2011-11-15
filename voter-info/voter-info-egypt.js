@@ -268,9 +268,9 @@ function setVoteGeo( places, address, location) {
 		//}
 		try {
 			var place = places[0];
-			if( location.lat && location.lng )
+			if( +location.lat && +location.lng )
 				place.geometry.location =
-					new gm.LatLng( location.lat, location.lng );
+					new gm.LatLng( +location.lat, +location.lng );
 		}
 		catch( e ) {
 			log( 'Error getting polling state' );
@@ -359,7 +359,7 @@ function findPrecinct( dummy, voterID ) {
 		}
 		var loc = locations[0];
 		var addr =
-			loc.lat && loc.lng ? [ loc.lat, loc.lng ].join(',') :
+			+loc.lat && +loc.lng ? [ +loc.lat, +loc.lng ].join(',') :
 			loc.unparsed_address;
 		if( addr ) {
 			log( 'Polling address:', addr );
