@@ -23,6 +23,7 @@ if( ! supportedLanguages[pref.lang] )
 function localPrefs( pref ) {
 	pref.voterIdElection = true;
 	pref.analyticsUA = 'UA-26399777-1';
+	pref.fontFamily = 'Tahoma,Geneva,sans-serif';
 }
 
 // [ W, S, E, N ]
