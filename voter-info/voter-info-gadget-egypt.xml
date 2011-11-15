@@ -27,7 +27,7 @@
 <!--	<EnumValue value="balloon" display_value="Balloon (Large Gadget)"/>-->
 <!--</UserPref>-->
 
-<UserPref name="fontFamily" datatype="string" display_name="Font&#160;Family" default_value="Arial,sans-serif"/>
+<UserPref name="fontFamily" datatype="string" display_name="Font&#160;Family" default_value="Tahoma,Geneva,sans-serif"/>
 
 <UserPref name="fontSize" datatype="enum" display_name="Font&#160;Size" default_value="16">
 	<EnumValue value="6"/>
