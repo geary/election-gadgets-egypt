@@ -533,14 +533,6 @@ var
 
 // HTML snippets
 
-// TODO: this isn't really used
-function electionHeader() {
-	return S(
-		'<div style="font-weight:bold;">',
-		'</div>'
-	);
-}
-
 // Should we show the map? Depends on polling place location.
 function includeMap() {
 	return vote && vote.info && vote.info.latlng;
@@ -963,6 +955,7 @@ function submit( addr ) {
 
 // Submit an ID for a voter ID election - no geocoding
 function submitID( id ) {
+	home.voterId = id;
 	findPrecinct( null, id );
 }
 

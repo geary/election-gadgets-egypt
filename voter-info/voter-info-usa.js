@@ -197,6 +197,13 @@ function electionInfo() {
 	);
 }
 
+function electionHeader() {
+	return S(
+		'<div style="font-weight:bold;">',
+		'</div>'
+	);
+}
+
 function generalInfo( state ) {
 	if( ! state ) return '';
 	
