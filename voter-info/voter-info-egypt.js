@@ -206,6 +206,16 @@ function getContests() {
 	return contests && contests.length && contests;
 }
 
+function locationInfo( location, place ) {
+	var name = location.name || '';
+	return {
+		address: location.unparsed_address,
+		location: S( location.name || '', ' (', location.code, ')' ),
+		place: place,
+		latlng: place && place.geometry.location
+	};
+}
+
 function formatLocations( locations, info, icon, title, infowindow, extra, mapped ) {
 	
 	function formatLocationRow( info ) {
@@ -227,10 +237,7 @@ function formatLocations( locations, info, icon, title, infowindow, extra, mappe
 	var rows = info ?
 		[ formatLocationRow(info) ] :
 		locations.map( function( location ) {
-			return formatLocationRow({
-				address: location.unparsed_address,
-				location: location.name || ''
-			});
+			return formatLocationRow( locationInfo(location) );
 		});
 	
 	return S(
@@ -277,13 +284,7 @@ function setVoteGeo( places, address, location) {
 			log( 'Error getting polling state' );
 		}
 		log( 'Getting polling place map info' );
-		vote.info = {
-			place: place,
-			address: location.unparsed_address,
-			latlng: place.geometry.location,
-			location: location.name,
-			_:''
-		};
+		vote.info = locationInfo( location, place );
 		setMap( vote.info  );
 		return;
 	}
