@@ -55,7 +55,8 @@ function electionInfo() {
 
 function electionHeader() {
 	return S(
-		'<div style="font-weight:bold;">',
+		'<div style="margin-bottom:8px;">',
+			T('voterIdLabel'), ' ', htmlEscape(home.voterId),
 		'</div>'
 	);
 }
