@@ -63,9 +63,11 @@
 
 <script type="text/javascript">
 	
+	var baseUrl = document.referrer.replace( /[^/]*$/, '' );
+	
 	var opt = {
-		codeUrl: 'http://egypt.election-gadgets.googlecode.com/hg/voter-info/',
-		gadgetUrl: 'http://egypt.election-gadgets.googlecode.com/hg/voter-info/voter-info-gadget-egypt.xml',
+		codeUrl: baseUrl,
+		gadgetUrl: baseUrl + 'voter-info-gadget-egypt.xml',
 		localJS: 'voter-info-egypt.js',
 		
 		MODULE_ID: __MODULE_ID__,
