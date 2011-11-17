@@ -955,7 +955,6 @@ function submit( addr ) {
 
 // Submit an ID for a voter ID election - no geocoding
 function submitID( id ) {
-	home.voterId = id;
 	findPrecinct( null, id );
 }
 
