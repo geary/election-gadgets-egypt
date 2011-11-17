@@ -92,6 +92,12 @@ function contestInfo( ) {
 					'</div>',
 					'<div class="heading" style="font-size:125%;">',
 						contest.constituency,
+					'</div>',
+					'<div>',
+						T('electoralRollLabel'), ' ', contest.citizen_number,
+					'</div>',
+					'<div>',
+						T('pollingStationLabel'), ' ', contest.box_number,
 					'</div>'//,
 					//candidates.mapjoin( function( candidate ) {
 					//	function party() {
