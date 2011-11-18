@@ -4,47 +4,38 @@
 	
 	<title>Google Election Center for Egypt</title>
 	
-	<style type="text/css"> 
-		/* Font */ 
+	<style type="text/css">
+		body { margin:0; }
 		#Poll411Gadget, #Poll411Gadget * { font-family:Tahoma,Geneva,sans-serif; font-size:16px;  } 
-		/* Sizes */ 
-		#Poll411Form { width:400px; } 
-		#Poll411Gadget { width:640px; } 
-		/* Colors */ 
-		/*#Poll411Gadget { border:1px solid #AAA; }*/ 
-		#Poll411Input.example { color:#666; } 
-		/* Layout */ 
-		#Poll411Title { padding-bottom:4px; } 
-		#Poll411Form { margin:8px; padding:0; vertical-align:middle; } 
-		#Poll411InputCell { width:99%; padding-right:8px; } 
-		#Poll411ButtonCell { width:1%; } 
-		#Poll411Input { width:100%; } 
-		#Poll411Frame { display:none; margin-top:6px; width:100%; } 
+		#Poll411Header { padding:12px; vertical-align:middle; background-color:#F5F5F5; border-bottom:1px solid #E5E5E5; } 
+		#Poll411Input { margin-left:8px; width:12em; }
+		#Poll411Frame { display:none; margin-top:12px; width:100%; } 
 	</style>
 	
 </head>
 <body scroll="no">
 	
-	<div id="Poll411Gadget"> 
-		<form id="Poll411Form" action="" onsubmit="return Poll411.submit()"> 
-			
-			<div class="Poll411SearchTitle removehelp"> 
-				<span> 
-					Enter your voter ID number 
-				</span> 
-			</div> 
-			
-			<table class="Poll411SearchTable" cellpadding="0" cellspacing="0" style="width:100%;"> 
-				<tr valign="middle"> 
-					<td id="Poll411InputCell"> 
-						<input type="text" id="Poll411Input" class="example" onfocus="Poll411.focus()" onblur="Poll411.blur()"> 
-					</td> 
-					<td id="Poll411ButtonCell"> 
-						<button type="submit" id="Poll411Button">Search</button> 
-					</td> 
-				</tr> 
-			</table> 
-		</form> 
+	<div id="Poll411Gadget">
+		<div id="Poll411Header">
+			<form id="Poll411Form" action="" onsubmit="return Poll411.submit()"> 
+				<span>
+					Election ID:
+				</span>
+				<label style="padding-left:10px;">
+					<input type="radio" name="electionId" id="election-100" value="-100" checked>
+					-100 (test)
+				</label>
+				<label style="padding-left:10px;">
+					<input type="radio" name="electionId" id="election2500" value="2500">
+					2500 (live)
+				</label>
+				<label style="padding-left:32px;"> 
+					Voter ID:
+					<input type="text" id="Poll411Input"> 
+				</label>
+				<button type="submit" id="Poll411Button">Search</button>
+			</form>
+		</div>
 		<div id="Poll411Frame"> 
 		</div> 
 	</div>
@@ -55,14 +46,11 @@
 			function e( id ) { return document.getElementById('Poll411'+id); } 
 			var label = e('Label'), input = e('Input'), button = e('Button'), frame = e('Frame'); 
 			
-			var example = ""; 
-			input.value = example; 
-			
-			function frameHTML( lang, addr ) {
+			function frameHTML( lang, addr, electionId ) {
 				return [
 					'<td>',
 					'<iframe ', 
-						'src="http://www.gmodules.com/ig/ifr?url=http://', location.host, '/hg/voter-info/voter-info-gadget-egypt.xml?temp1&amp;synd=open&amp;hl=', lang, '&amp;up_gadgetType=iframe&amp;up_address=', encodeURIComponent(addr), '&amp;up_fontFamily=', encodeURIComponent(fontFamily), '&amp;up_fontSize=', fontSize, '&amp;up_fontUnits=', fontUnits, '&amp;up_submit=1" ', 
+						'src="http://www.gmodules.com/ig/ifr?url=http://', location.host, '/hg/voter-info/voter-info-gadget-egypt.xml?temp1&amp;synd=open&amp;hl=', lang, '&amp;up_gadgetType=iframe&amp;up_address=', encodeURIComponent(addr), '&amp;up_fontFamily=', encodeURIComponent(fontFamily), '&amp;up_fontSize=', fontSize, '&amp;up_fontUnits=', fontUnits, '&amp;up_electionId=', electionId, '&amp;up_submit=1" ', 
 						'style="width:600px; height:540px; margin-left:8px; border:1px solid #BBB;" ', 
 						'frameborder="0" ', 
 						'scrolling="no" ', 
@@ -74,32 +62,18 @@
 			
 			Poll411 = { 
 				
-				focus: function() { 
-					if( input.value == example ) { 
-						input.className = ''; 
-						input.value = ''; 
-					} 
-				}, 
-				
-				blur: function() { 
-					if( input.value ==  ''  ||  input.value == example ) { 
-						input.className = 'example'; 
-						input.value = example; 
-					} 
-				}, 
-				
-				select: function() { 
-				}, 
-				
 				submit: function() { 
 					var addr = input.value; 
-					if( addr == example ) addr = addr.replace( /^.*: /, '' );
+					var electionId =
+						document.getElementById('election-100').checked
+							? -100
+							: 2500;
 					frame.style.display = 'block'; 
 					frame.innerHTML = [
 						'<table cellpadding="0" cellspacing="0">',
 							'<tr>',
-								frameHTML( 'ar', addr ),
-								frameHTML( 'en', addr ),
+								frameHTML( 'ar', addr, electionId ),
+								frameHTML( 'en', addr, electionId ),
 							'</tr>',
 						'</table>'
 					].join('');
