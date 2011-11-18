@@ -69,7 +69,7 @@ function generalInfo() {
 
 function contestInfo( ) {
 	var contests = getContests();
-	if( ! contests ) return '';
+	if( !( contests && contests.length ) ) return '';
 	//contests = sortArrayBy( contests, 'ballot_placement', { numeric:true } );
 	//var randomize = contests[0].ballot.candidate[0].order_on_ballot == null;
 	//var randomizedMessage = ! randomize ? '' : S(
@@ -79,6 +79,12 @@ function contestInfo( ) {
 	//);
 	return S(
 		'<div>',
+			'<div>',
+				T('electoralRollLabel'), ' ', contests[0].citizen_number,
+			'</div>',
+			'<div>',
+				T('pollingStationLabel'), ' ', contests[0].box_number,
+			'</div>',
 			//randomizedMessage,
 			contests.mapjoin( function( contest ) {
 				//var candidates = contest.ballot.candidate;
@@ -92,13 +98,7 @@ function contestInfo( ) {
 					'</div>',
 					'<div class="heading" style="font-size:125%;">',
 						contest.constituency,
-					'</div>',
-					'<div>',
-						T('electoralRollLabel'), ' ', contest.citizen_number,
-					'</div>',
-					'<div>',
-						T('pollingStationLabel'), ' ', contest.box_number,
-					'</div>'//,
+					'</div>' //,
 					//candidates.mapjoin( function( candidate ) {
 					//	function party() {
 					//		return candidate.party ? S(
