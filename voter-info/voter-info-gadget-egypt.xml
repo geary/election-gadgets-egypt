@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<ModulePrefs
+    title="جوجل التطبيق مركز انتخاب لمصر"
+    description=""
+    author="Google, Inc."
+    author_affiliation="Google, Inc."
+    author_email="elections@google.com"
+    thumbnail=""
+    screenshot=""
+    title_url=""
+    width="740"
+    height="640">
+  <Locale lang="ar" language_direction="rtl" />
+  <Locale lang="en"/>
+  <Require feature="analytics"/>
+</ModulePrefs>
+
+<UserPref name="gadgetType" datatype="enum" display_name="Gadget&#160;Type" default_value="iframe">
+	<EnumValue value="iframe" display_value="Standard Gadget"/>
+	<EnumValue value="inline" display_value="Inline Gadget"/>
+</UserPref>
+
+<!--<UserPref name="details" datatype="enum" display_name="Details&#160;In" default_value="tab">-->
+<!--	<EnumValue value="tab" display_value="Tab (Small Gadget)"/>-->
+<!--	<EnumValue value="balloon" display_value="Balloon (Large Gadget)"/>-->
+<!--</UserPref>-->
+
+<UserPref name="fontFamily" datatype="string" display_name="Font&#160;Family" default_value="Tahoma,Geneva,sans-serif"/>
+
+<UserPref name="fontSize" datatype="enum" display_name="Font&#160;Size" default_value="16">
+	<EnumValue value="6"/>
+	<EnumValue value="7"/>
+	<EnumValue value="8"/>
+	<EnumValue value="9"/>
+	<EnumValue value="10"/>
+	<EnumValue value="11"/>
+	<EnumValue value="12"/>
+	<EnumValue value="13"/>
+	<EnumValue value="14"/>
+	<EnumValue value="15"/>
+	<EnumValue value="16"/>
+	<EnumValue value="17"/>
+	<EnumValue value="18"/>
+	<EnumValue value="19"/>
+	<EnumValue value="20"/>
+	<EnumValue value="21"/>
+	<EnumValue value="22"/>
+	<EnumValue value="23"/>
+	<EnumValue value="24"/>
+</UserPref>
+
+<UserPref name="fontUnits" datatype="enum" display_name="Font&#160;Units" default_value="px">
+	<EnumValue value="pt" display_value="Points (pt)"/>
+	<EnumValue value="px" display_value="Pixels (px)"/>
+</UserPref>
+
+<UserPref name="electionId" datatype="string" display_name="Election&#160;ID" default_value="2500"/>
+
+<Content type="html">
+<![CDATA[
+
+<script type="text/javascript">
+	
+	var baseUrl = document.referrer.replace( /[^/]*$/, '' );
+	
+	var opt = {
+		codeUrl: baseUrl,
+		gadgetUrl: baseUrl + 'voter-info-gadget-egypt.xml',
+		localJS: 'voter-info-egypt.js',
+		
+		MODULE_ID: __MODULE_ID__,
+		BIDI_START_EDGE: '__BIDI_START_EDGE__',
+		BIDI_END_EDGE: '__BIDI_END_EDGE__',
+		BIDI_DIR: '__BIDI_DIR__',
+		BIDI_REVERSE_DIR: '__BIDI_REVERSE_DIR__',
+		
+		writeScript: function( name, seconds ) {
+			document.write(
+				'<script type="text/javascript" src="', opt.codeUrl + name, '">',
+				'<\/script>'
+			);
+		}
+	};
+	
+	opt.writeScript( 'voter-info.js' );
+	
+</script>
+
+]]>
+</Content>
+
+</Module>

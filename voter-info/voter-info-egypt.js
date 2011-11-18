@@ -1,0 +1,405 @@
+// voter-info-egypt.js
+// By Michael Geary - http://mg.to/
+// See UNLICENSE or http://unlicense.org/ for public domain notice.
+
+// Language and prefs
+
+var defaultLanguage = 'ar';
+var supportedLanguages = {
+	ar: 'عربي',
+	en: 'English',
+	fr: 'Français',
+	_: null
+};
+
+var prefs = new _IG_Prefs();
+var pref = {
+	lang: prefs.getString( '.lang' )
+};
+
+if( ! supportedLanguages[pref.lang] )
+	pref.lang = defaultLanguage;
+
+function localPrefs( pref ) {
+	pref.voterIdElection = true;
+	pref.analyticsUA = 'UA-26399777-1';
+	pref.fontFamily = 'Tahoma,Geneva,sans-serif';
+}
+
+// [ W, S, E, N ]
+var initialBbox = [ 25.0, 22.0, 36.9, 31.6 ];
+
+// Output formatters
+
+function attribution() {
+	return T( 'attributionEG' );
+}
+
+function stateLocator() {
+	return '';
+}
+
+function locationWarning() {
+	return '';
+}
+
+function electionInfo() {
+	return S(
+		//generalInfo(),
+		contestInfo(),
+		//infoLinks(),
+		attribution(),
+		''
+	);
+}
+
+function electionHeader() {
+	return S(
+		'<div style="font-weight:bold;">',
+		'</div>'
+	);
+}
+
+function generalInfo() {
+	return S(
+		'<div style="margin-bottom:0.5em;">',
+		'</div>'
+	);
+}
+
+function contestInfo( ) {
+	var contests = getContests();
+	if( ! contests ) return '';
+	//contests = sortArrayBy( contests, 'ballot_placement', { numeric:true } );
+	//var randomize = contests[0].ballot.candidate[0].order_on_ballot == null;
+	//var randomizedMessage = ! randomize ? '' : S(
+	//	'<div style="font-size:85%; font-style:italic; margin-top:0.5em">',
+	//		T('candidateRandomOrder'),
+	//	'</div>'
+	//);
+	return S(
+		'<div>',
+			//randomizedMessage,
+			contests.mapjoin( function( contest ) {
+				//var candidates = contest.ballot.candidate;
+				//candidates = randomize ?
+				//	candidates.randomized() :
+				//	sortArrayBy( candidates, 'order_on_ballot', { numeric:true } );
+					
+				return S(
+					'<div class="heading" style="font-size:150%;">',
+						contest.type,
+					'</div>',
+					'<div class="heading" style="font-size:125%;">',
+						contest.constituency,
+					'</div>',
+					'<div>',
+						T('electoralRollLabel'), ' ', contest.citizen_number,
+					'</div>',
+					'<div>',
+						T('pollingStationLabel'), ' ', contest.box_number,
+					'</div>'//,
+					//candidates.mapjoin( function( candidate ) {
+					//	function party() {
+					//		return candidate.party ? S(
+					//			'<span style="color:#444; font-size:85%;">',
+					//				' - ',
+					//				candidate.party,
+					//			'</span>'
+					//		) : '';
+					//	}
+					//	return S(
+					//		'<div>',
+					//			linkIf( candidate.name, candidate.candidate_url ),
+					//			party(),
+					//		'</div>'
+					//	);
+					//})
+				);
+			}),
+		'</div>'
+	);
+}
+
+function setVoteHtml() {
+	if( !( vote.info || vote.locations || vote.poll ) ) {  // TODO
+		$details.append( log.print() );
+		return;
+	}
+	//var largeMapLink = S(
+	//	'<div style="padding-top:0.5em;">',
+	//		'<a target="_blank" href="http://maps.google.com/maps?f=q&hl=en&geocode=&q=', encodeURIComponent( a.address.replace( / /g, '+' ) ), '&ie=UTF8&ll=', latlng, '&z=15&iwloc=addr">',
+	//			'Large map and directions &#187;',
+	//		'</a>',
+	//	'</div>'
+	//);
+	
+	function voteLocation( infowindow ) {
+		var loc = T('yourVotingLocation');
+		if( !( vote.locations && vote.locations.length ) )
+			return '';
+		if( vote.info )
+			return formatLocations( vote.locations, null,
+				infowindow
+					? { url:'vote-icon-50.png', width:50, height:50 }
+					: { url:'vote-pin-icon.png', width:29, height:66 },
+				loc, infowindow, '', true
+			);
+		return infowindow ? '' : formatLocations( vote.locations, null,
+			{ url:'vote-icon-32.png', width:32, height:32 },
+			loc + ( vote.locations.length > 1 ? 's' : '' ), false, '', false
+		);
+	}
+	
+	if( ! sidebar ) $tabs.show();
+	$details.html( longInfo() ).show();
+	vote.html = infoWrap( S(
+		log.print(),
+		electionHeader(),
+		homeAndVote(),
+		'<div style="padding-top:1em">',
+		'</div>',
+		electionInfo()
+	) );
+	vote.htmlInfowindow = infoWrap( S(
+		log.print(),
+		electionHeader(),
+		homeAndVote( true )//,
+		//'<div style="padding-top:1em">',
+		//'</div>',
+		//electionInfo()
+	) );
+	
+	function homeAndVote( infowindow ) {
+		var viewMessage = getContests() ?
+			T('viewCandidates') :
+			T('viewDetails');
+		var viewLink = sidebar ? '' : S(
+			'<div style="padding-top:0.75em;">',
+				'<a href="#detailsbox" onclick="return selectTab(\'#detailsbox\');">',
+					viewMessage,
+				'</a>',
+			'</div>'
+		);
+		return vote.info && vote.info.latlng ? S(
+			voteLocation( true ),
+			viewLink
+			//locationWarning(),
+			//'<div style="padding-top:0.75em">',
+			//'</div>',
+		) : S(
+			//'<div style="padding-top:0.75em">',
+			//'</div>',
+			voteLocation( infowindow )/*,
+			locationWarning()*/
+		);
+	}
+	
+	function longInfo() {
+		return T( 'longInfoEgypt', {
+			log: log.print(),
+			header: electionHeader(),
+			location: voteLocation(),
+			warning: locationWarning(),
+			info: electionInfo()
+		});
+	}
+}
+
+function getContests() {
+	var contests = vote && vote.poll && vote.poll.contests;
+	return contests && contests.length && contests;
+}
+
+function locationInfo( location, place ) {
+	var name = location.name || '';
+	return {
+		address: location.unparsed_address,
+		location: location.name || '',
+		place: place,
+		latlng: place && place.geometry.location
+	};
+}
+
+function formatLocations( locations, info, icon, title, infowindow, extra, mapped ) {
+	
+	function formatLocationRow( info ) {
+		var address = T( 'address', {
+			location: H( info.location ),
+			address: multiLineAddress( info.address )
+		});
+		return T( 'locationRow', {
+			iconSrc: imgUrl(icon.url),
+			iconWidth: icon.width,
+			iconHeight: icon.height,
+			address: address,
+			directions: info.directions || '',
+			hours: info.hours ? 'Hours: ' + info.hours : '',
+			extra: extra || ''
+		});
+	}
+	
+	var rows = info ?
+		[ formatLocationRow(info) ] :
+		locations.map( function( location ) {
+			return formatLocationRow( locationInfo(location) );
+		});
+	
+	return S(
+		T( 'locationHead', {
+			select: includeMap() ? 'onclick="return maybeSelectTab(\'#mapbox\',event);" style="cursor:pointer;"' : '',
+			title: title
+		}),
+		rows.join(''),
+		T( 'locationFoot', {
+			unable: info && info.latlng || mapped ? '' : T('locationUnable')
+		})
+	);
+}
+
+function formatHome() {
+	return '';
+}
+
+// Set up map and sidebar when the polling place location is known
+function setVoteGeo( places, address, location) {
+	//if( places && places.length == 1 ) {
+	if( places && places.length >= 1 ) {
+		// More than one place, use first match only if it has address
+		// accuracy and the remaining matches don't
+		//if( places.length > 1 ) {
+		//	if( places[0].AddressDetails.Accuracy < Accuracy.address ) {
+		//		setVoteNoGeo();
+		//		return;
+		//	}
+		//	for( var place, i = 0;  place = places[++i]; ) {
+		//		if( places[i].AddressDetails.Accuracy >= Accuracy.address ) {
+		//			setVoteNoGeo();
+		//			return;
+		//		}
+		//	}
+		//}
+		try {
+			var place = places[0];
+			if( +location.lat && +location.lng )
+				place.geometry.location =
+					new gm.LatLng( +location.lat, +location.lng );
+		}
+		catch( e ) {
+			log( 'Error getting polling state' );
+		}
+		log( 'Getting polling place map info' );
+		vote.info = locationInfo( location, place );
+		setMap( vote.info  );
+		return;
+	}
+	setVoteNoGeo();
+}
+
+// Set up map and sidebar with no polling place location
+function setVoteNoGeo() {
+	setVoteHtml();
+	forceDetails();
+}
+
+// Return a single line formatted address, from either a string or
+// an address object
+function oneLineAddress( address ) {
+	if( ! address )
+		return '';
+	//if( typeof address == 'string' )
+	//	return H(address).replace( /, USA$/, '' );
+	return H( S(
+		address.line1 ? address.line1 + ', ' : '',
+		address.line2 ? address.line2 + ', ' : '',
+		address.city, ', ', address.state,
+		address.zip ? ' ' + address.zip : ''
+	) );
+}
+
+// Return a multiline formatted address, from either a string or
+// an address object
+function multiLineAddress( address ) {
+	if( ! address )
+		return '';
+	if( typeof address == 'string' )
+		return H(address)
+			//.replace( /, USA$/, '' )
+			.replace( /, (\w\w) /, '\| $1 ' )
+			.replace( /, /g, '<br>' )
+			.replace( /\|/g, ',' );
+	return S(
+		address.line1 ? H(address.line1) + '<br>' : '',
+		address.line2 ? H(address.line2) + '<br>' : '',
+		H(address.city), ', ', H(address.state),
+		address.zip ? ' ' + H(address.zip) : ''
+	);
+}
+
+// Apply any local fixups to an address
+function fixInputAddress( addr ) {
+	//if( addr == pref.example )
+	//	addr = addr.replace( /^.*: /, '' );
+	return addr;
+}
+
+// Geocoding and Election Center API
+
+function findPrecinct( dummy, voterID ) {
+	pollingApiIdProxy( voterID, function( poll ) {
+		log( 'API status code: ' + poll.status || '(OK)' );
+		vote.poll = poll;
+		if( poll.status != 'SUCCESS' ) {
+			sorry();
+			return;
+		}
+		var locations = vote.locations = poll.locations;
+		if( ! locations  ||  ! locations.length ) {
+			log( 'No polling locations' );
+			setVoteNoGeo();
+			return;
+		}
+		if( locations.length > 1 ) {
+			log( 'Multiple polling locations' );
+			setVoteNoGeo();
+			return;
+		}
+		var loc = locations[0];
+		var addr =
+			+loc.lat && +loc.lng ? [ +loc.lat, +loc.lng ].join(',') :
+			loc.unparsed_address;
+		if( addr ) {
+			log( 'Polling address:', addr );
+			geocode( addr, function( places ) {
+				setVoteGeo( places, addr, loc );
+			});
+		}
+		else {
+			log( 'No polling address' );
+			setVoteNoGeo();
+		}
+	},
+	{
+		electionId: 2500
+	});
+}
+
+// Gadget initialization
+
+function zoomTo( bbox ) {
+	var bounds = new gm.LatLngBounds(
+		new gm.LatLng( bbox[1], bbox[0] ),
+		new gm.LatLng( bbox[3], bbox[2] )
+	);
+	map.fitBounds( bounds );
+}
+
+function gadgetReady( json ) {
+	initMap( function() {
+		setupTabs();
+		if( pref.ready )
+			submit( pref.address || pref.example );
+		else
+			zoomTo( initialBbox );
+	});
+}
