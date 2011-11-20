@@ -98,6 +98,9 @@ function contestInfo( ) {
 					'</div>',
 					'<div class="heading" style="font-size:125%;">',
 						contest.constituency,
+					'</div>',
+					'<div class="heading">',
+						electionDates(contest),
 					'</div>' //,
 					//candidates.mapjoin( function( candidate ) {
 					//	function party() {
@@ -118,6 +121,16 @@ function contestInfo( ) {
 				);
 			}),
 		'</div>'
+	);
+}
+
+function electionDates( contest ) {
+	return S(
+		T('electionDate'), ' ', contest.date,
+		contest.ballot_choices.choices.length ? '' : S(
+			'<br>',
+			T('runoffDate'), ' ', contest.date_round_2
+		)
 	);
 }
 
