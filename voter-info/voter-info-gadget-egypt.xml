@@ -65,7 +65,7 @@
 	
 	// Use hard coded base URL unless referrer is Google Code, then use same path as referrer for testing
 	var match = document.referrer.match( /https?:\/\/[^\/]*election-gadgets[^\/]*\.googlecode\.com\/hg\/voter-info\// );
-	var baseUrl = match ? match[0] : 'http://election-gadgets-egypt.googlecode.com/hg/voter-info/';
+	var baseUrl = match ? match[0] : 'https://election-gadgets-egypt.googlecode.com/hg/voter-info/';
 	
 	var opt = {
 		codeUrl: baseUrl,
