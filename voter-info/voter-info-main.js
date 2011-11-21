@@ -47,7 +47,7 @@ function writeScript( url ) {
 	document.write( '<script type="text/javascript" src="', url, '"></script>' );
 }
 
-writeScript( 'http://www.google.com/jsapi' );
+writeScript( '//www.google.com/jsapi' );
 
 // Array extensions
 
