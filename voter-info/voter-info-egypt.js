@@ -127,7 +127,7 @@ function contestInfo( ) {
 function electionDates( contest ) {
 	return S(
 		T('electionDate'), ' ', contest.date,
-		contest.ballot_choices.choices.length ? '' : S(
+		contest.type == 'قوائم شعب' ? '' : S(
 			'<br>',
 			T('runoffDate'), ' ', contest.date_round_2
 		)
