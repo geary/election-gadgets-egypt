@@ -101,23 +101,8 @@ function contestInfo( ) {
 					'</div>',
 					'<div class="heading">',
 						electionDates(contest),
-					'</div>' //,
-					//candidates.mapjoin( function( candidate ) {
-					//	function party() {
-					//		return candidate.party ? S(
-					//			'<span style="color:#444; font-size:85%;">',
-					//				' - ',
-					//				candidate.party,
-					//			'</span>'
-					//		) : '';
-					//	}
-					//	return S(
-					//		'<div>',
-					//			linkIf( candidate.name, candidate.candidate_url ),
-					//			party(),
-					//		'</div>'
-					//	);
-					//})
+					'</div>',
+					contestBallot( contest )
 				);
 			}),
 		'</div>'
@@ -127,10 +112,60 @@ function contestInfo( ) {
 function electionDates( contest ) {
 	return S(
 		T('electionDate'), ' ', contest.date,
-		contest.type == 'قوائم شعب' ? '' : S(
+		isListContest(contest) ? '' : S(
 			'<br>',
 			T('runoffDate'), ' ', contest.date_round_2
 		)
+	);
+}
+
+function isListContest( contest ) {
+	return contest.type == 'قوائم شعب';
+}
+
+function contestBallot( contest ) {
+	var ballot = contest.ballot_choices;
+	return isListContest(contest) ? S(
+		'<div class="">',
+			( ballot.choices || [] ).mapjoin( function( partylist ) {
+				return S(
+					'<div class="partylist">',
+						'<div class="partylistname">',
+							partylist.name,
+						'</div>',
+						contestCandidates( partylist.candidates ),
+					'</div>'
+				);
+			}),
+		'</div>'
+	) : S(
+		'<div class="">',
+			contestCandidates( ballot.candidates ),
+		'</div>'
+	);
+}
+
+function contestCandidates( candidates ) {
+	return S(
+		'<div class="candidates">',
+			candidates.mapjoin( function( candidate ) {
+				var nick = candidate.nick_name ?
+					S( '"', candidate.nick_name, '" - ' ) : '';
+				return S(
+					'<div class="candidate">',
+						'<div>',
+							linkIf( candidate.name, candidate.candidate_url ),
+							' (', candidate.number, ')',
+						'</div>',
+						'<div>',
+							//'<img src="', candidate.symbol_url, '" alt="', candidate.symbol, '">',
+							nick,
+							candidate.type,
+						'</div>',
+					'</div>'
+				);
+			}),
+		'</div>'
 	);
 }
 
