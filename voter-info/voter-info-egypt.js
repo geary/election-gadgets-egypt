@@ -150,17 +150,19 @@ function contestCandidates( candidates ) {
 		'<div class="candidates">',
 			candidates.mapjoin( function( candidate ) {
 				var nick = candidate.nick_name ?
-					S( '"', candidate.nick_name, '" - ' ) : '';
+					S( '"', candidate.nick_name, '" ' ) : '';
 				return S(
 					'<div class="candidate">',
 						'<div>',
-							linkIf( candidate.name, candidate.candidate_url ),
-							' (', candidate.number, ')',
-						'</div>',
-						'<div>',
+							linkIf(
+								nick +candidate.name,
+								candidate.candidate_url
+							),
+							' - ', candidate.type,
 							//'<img src="', candidate.symbol_url, '" alt="', candidate.symbol, '">',
-							nick,
-							candidate.type,
+							'<span class="candidate-number">',
+								' (', candidate.number, ')',
+							'</span>',
 						'</div>',
 					'</div>'
 				);
