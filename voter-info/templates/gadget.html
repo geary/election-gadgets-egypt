@@ -32,11 +32,10 @@
   #Poll411Gadget { margin:0; padding:4px 0 4px 2px; } 
   #Poll411SelectState { margin-bottom:4px; } 
   #Poll411Title { padding-bottom:4px; } 
-  #Poll411Form { margin:0; padding:0; vertical-align:middle; } 
+  #Poll411Form { margin:0; padding:0; vertical-align:middle; }
+  #Poll411Button { font-weight:bold; margin:0 4px; }
   .Poll411SearchTitle, #Poll411InputCell { padding:0 8px; } 
-  #Poll411InputCell { width:99%; } 
-  #Poll411ButtonCell { width:1%; } 
-  #Poll411Input { width:100%; } 
+  #Poll411Input { width:11em; } 
   #Poll411Frame { display:none; margin-top:6px; } 
 </style> 
  
@@ -104,22 +103,14 @@
 <div id="Poll411Gadget"> 
   <form id="Poll411Form" action="" onsubmit="return Poll411.submit()"> 
     
-    <div class="Poll411SearchTitle removehelp"> 
+    <span class="Poll411SearchTitle removehelp"> 
       <span> 
         {{homePrompt}} 
       </span> 
-    </div> 
+    </span> 
     
-    <table class="Poll411SearchTable" cellpadding="0" cellspacing="0" style="width:100%;"> 
-      <tr valign="middle"> 
-        <td id="Poll411InputCell"> 
-          <input type="text" id="Poll411Input" class="example" onfocus="Poll411.focus()" onblur="Poll411.blur()"> 
-        </td> 
-        <td id="Poll411ButtonCell"> 
-          <button type="submit" id="Poll411Button">{{search}}</button> 
-        </td> 
-      </tr> 
-    </table> 
+    <input type="text" id="Poll411Input" class="example" onfocus="Poll411.focus()" onblur="Poll411.blur()"> 
+    <button type="submit" id="Poll411Button">{{search}}</button> 
   </form> 
   <div id="Poll411Frame"> 
   </div> 
