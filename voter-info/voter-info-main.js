@@ -531,6 +531,17 @@ var
 	home,  // home information
 	vote;  // voting information
 
+var
+	$search,
+	$selectState,
+	$tabs,
+	$previewmap,
+	$map,
+	$details,
+	$detailsbox,
+	$spinner,
+	$directions;
+
 // HTML snippets
 
 // Should we show the map? Depends on polling place location.
@@ -1007,6 +1018,7 @@ function submitAddress( addr ) {
 
 // Set up the gadget layout according to its size and options
 function setLayout() {
+	if( ! $tabs ) return;
 	$body.toggleClass( 'sidebar', sidebar );
 	var headerHeight = $('#header').visibleHeight();
 	if( pref.logo ) {
