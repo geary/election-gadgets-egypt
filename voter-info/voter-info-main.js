@@ -1018,7 +1018,7 @@ function submitAddress( addr ) {
 
 // Set up the gadget layout according to its size and options
 function setLayout() {
-	if( ! $tabs ) return;
+	if( ! $tabs ) return;  // Fix IE6 bug: setLayout() is called too soon
 	$body.toggleClass( 'sidebar', sidebar );
 	var headerHeight = $('#header').visibleHeight();
 	if( pref.logo ) {
