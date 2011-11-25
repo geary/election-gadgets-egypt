@@ -125,6 +125,7 @@ function isListContest( contest ) {
 
 function contestBallot( contest ) {
 	var ballot = contest.ballot_choices;
+	if( ! ballot ) return '';
 	return isListContest(contest) ? S(
 		'<div class="">',
 			( ballot.choices || [] ).mapjoin( function( partylist ) {
