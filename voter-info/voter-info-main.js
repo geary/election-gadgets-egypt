@@ -406,6 +406,9 @@ var maker = decodeURIComponent(location.href).indexOf('source=http://www.gmodule
 
 var fontStyle = S( 'font-family:', htmlEscape(unescape(pref.fontFamily)), '; font-size:', pref.fontSize, pref.fontUnits, '; ' );
 
+// loadStrings is the callback function for a localized JSONP file in
+// locale/lang-??.js, which is loaded with an opt.writeScript() call
+// at the end of this file
 function loadStrings( strings ) {
 	pref.strings = strings;
 	
