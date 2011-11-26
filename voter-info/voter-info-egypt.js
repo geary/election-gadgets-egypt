@@ -400,6 +400,10 @@ function findPrecinct( dummy, voterID ) {
 	pollingApiIdProxy( voterID, function( poll ) {
 		log( 'API status code: ' + poll.status || '(OK)' );
 		vote.poll = poll;
+		if( poll.status == 'NO_VOTER_FOUND' ) {
+			detailsOnlyMessage( T('noVoterId') );
+			return;
+		}
 		if( poll.status != 'SUCCESS' ) {
 			sorry();
 			return;
@@ -446,6 +450,9 @@ function zoomTo( bbox ) {
 }
 
 function gadgetReady( json ) {
+	$.extend( T.variables, {
+		officialGadget: linkto('http://www.elections2011.eg/#gadget')
+	});
 	initMap( function() {
 		setupTabs();
 		if( pref.ready )

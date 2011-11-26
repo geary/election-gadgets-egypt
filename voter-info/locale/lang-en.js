@@ -33,6 +33,7 @@ loadStrings({
 "monthName10": "October", 
 "monthName11": "November", 
 "monthName12": "December", 
+"noVoterId": "We did not find your voter information.<p>Please check the official government voter information gadget:<p>{{officialGadget}}", 
 "pollingStationLabel": "Polling station number:", 
 "reportAnError": "Report an error", 
 "runoffDate": "Runoff date:", 
