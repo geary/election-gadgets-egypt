@@ -95,7 +95,9 @@ function contestsInfo( ) {
 }
 
 function contestInfo( contest, label, date$, candidates$, choices$ ) {
-	var date = dateFromYMD( contest[date$] );
+	var ymd = contest[date$];
+	if( ! ymd ) return '';
+	var date = dateFromYMD( ymd );
 	var completed = ( today - date ) > ( 1 * days );
 	return S(
 		'<div class="heading" style="font-size:150%;">',
