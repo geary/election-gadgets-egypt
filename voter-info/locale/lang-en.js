@@ -2,6 +2,7 @@ loadStrings({
 "apiFailed": "We are having trouble getting your voting information.<br>Please try again later.", 
 "areYouRegistered": "Are you registered to vote?", 
 "candidateRandomOrder": "Candidates are listed in random order", 
+"completed": "Completed", 
 "dateFormat": "{{monthName}} {{dayOfMonth}}", 
 "dayDateFormat": "{{dayName}}, {{monthName}} {{dayOfMonth}}", 
 "dayName1": "Sunday", 
