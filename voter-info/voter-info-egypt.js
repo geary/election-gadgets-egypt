@@ -46,7 +46,7 @@ function locationWarning() {
 function electionInfo() {
 	return S(
 		//generalInfo(),
-		contestInfo(),
+		contestsInfo(),
 		//infoLinks(),
 		attribution(),
 		''
@@ -67,16 +67,9 @@ function generalInfo() {
 	);
 }
 
-function contestInfo( ) {
+function contestsInfo( ) {
 	var contests = getContests();
 	if( !( contests && contests.length ) ) return '';
-	//contests = sortArrayBy( contests, 'ballot_placement', { numeric:true } );
-	//var randomize = contests[0].ballot.candidate[0].order_on_ballot == null;
-	//var randomizedMessage = ! randomize ? '' : S(
-	//	'<div style="font-size:85%; font-style:italic; margin-top:0.5em">',
-	//		T('candidateRandomOrder'),
-	//	'</div>'
-	//);
 	return S(
 		'<div>',
 			'<div>',
@@ -85,37 +78,38 @@ function contestInfo( ) {
 			'<div>',
 				T('pollingStationLabel'), ' ', contests[0].box_number,
 			'</div>',
-			//randomizedMessage,
 			contests.mapjoin( function( contest ) {
-				//var candidates = contest.ballot.candidate;
-				//candidates = randomize ?
-				//	candidates.randomized() :
-				//	sortArrayBy( candidates, 'order_on_ballot', { numeric:true } );
-					
-				return S(
-					'<div class="heading" style="font-size:150%;">',
-						contest.type,
-					'</div>',
-					'<div class="heading" style="font-size:125%;">',
-						contest.constituency,
-					'</div>',
-					'<div class="heading">',
-						electionDates(contest),
-					'</div>',
-					contestBallot( contest )
+				return contestInfo(
+					contest, 'electionDate',
+					'date', 'candidates', 'choices'
 				);
+			}),
+			contests.mapjoin( function( contest ) {
+				return contestInfo(
+					contest, 'runoffDate',
+					'date_round_2', 'candidates_round_2'
+				)
 			}),
 		'</div>'
 	);
 }
 
-function electionDates( contest ) {
+function contestInfo( contest, label, date$, candidates$, choices$ ) {
+	var date = dateFromYMD( contest[date$] );
+	var completed = ( today - date ) > ( 1 * days );
 	return S(
-		T('electionDate'), ' ', contest.date,
-		isListContest(contest) ? '' : S(
-			'<br>',
-			T('runoffDate'), ' ', contest.date_round_2
-		)
+		'<div class="heading" style="font-size:150%;">',
+			contest.type,
+		'</div>',
+		'<div class="heading" style="font-size:125%;">',
+			contest.constituency,
+		'</div>',
+		'<div class="heading">',
+			T(label), ' ', contest[date$],
+		'</div>',
+		completed ?
+			T('completed') :
+			contestBallot( contest, candidates$, choices$ )
 	);
 }
 
@@ -123,25 +117,25 @@ function isListContest( contest ) {
 	return contest.type == 'قوائم شعب';
 }
 
-function contestBallot( contest ) {
+function contestBallot( contest, candidates$, choices$ ) {
 	var ballot = contest.ballot_choices;
 	if( ! ballot ) return '';
 	return isListContest(contest) ? S(
 		'<div class="">',
-			( ballot.choices || [] ).mapjoin( function( partylist ) {
+			( ballot[choices$] || [] ).mapjoin( function( partylist ) {
 				return S(
 					'<div class="partylist">',
 						'<div class="partylistname">',
 							partylist.name,
 						'</div>',
-						contestCandidates( partylist.candidates ),
+						contestCandidates( partylist[candidates$] ),
 					'</div>'
 				);
 			}),
 		'</div>'
 	) : S(
 		'<div class="">',
-			contestCandidates( ballot.candidates ),
+			contestCandidates( ballot[candidates$] ),
 		'</div>'
 	);
 }
