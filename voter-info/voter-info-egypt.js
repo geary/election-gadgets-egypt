@@ -393,6 +393,12 @@ function fixInputAddress( addr ) {
 // Geocoding and Election Center API
 
 function findPrecinct( dummy, voterID ) {
+	// Support 'voterid|yyyy-mm-dd' date override for testing
+	var v = voterID.split('|');
+	if( v.length == 2 ) {
+		voterID = v[0];
+		today = dateFromYMD( v[1] );
+	}
 	pollingApiIdProxy( voterID, function( poll ) {
 		log( 'API status code: ' + poll.status || '(OK)' );
 		vote.poll = poll;
