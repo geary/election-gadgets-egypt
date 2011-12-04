@@ -80,13 +80,13 @@ function contestsInfo( ) {
 			'</div>',
 			contests.mapjoin( function( contest ) {
 				return contestInfo(
-					contest, 'electionDate',
+					contest, false,
 					'date', 'candidates', 'choices'
 				);
 			}),
 			contests.mapjoin( function( contest ) {
 				return contestInfo(
-					contest, 'runoffDate',
+					contest, true,
 					'date_round_2', 'candidates_round_2'
 				)
 			}),
@@ -94,7 +94,7 @@ function contestsInfo( ) {
 	);
 }
 
-function contestInfo( contest, label, date$, candidates$, choices$ ) {
+function contestInfo( contest, runoff, date$, candidates$, choices$ ) {
 	var ymd = contest[date$];
 	if( ! ymd ) return '';
 	var date = dateFromYMD( ymd );
@@ -107,11 +107,11 @@ function contestInfo( contest, label, date$, candidates$, choices$ ) {
 			contest.constituency,
 		'</div>',
 		'<div class="heading">',
-			T(label), ' ', contest[date$],
+			T( runoff ? 'runoffDate' : 'electionDate' ), ' ', contest[date$],
 		'</div>',
 		completed ?
 			T('completed') :
-			contestBallot( contest, candidates$, choices$ )
+			contestBallot( contest, runoff, candidates$, choices$ )
 	);
 }
 
@@ -119,7 +119,7 @@ function isListContest( contest ) {
 	return contest.type == 'قوائم شعب';
 }
 
-function contestBallot( contest, candidates$, choices$ ) {
+function contestBallot( contest, runoff, candidates$, choices$ ) {
 	var ballot = contest.ballot_choices;
 	if( ! ballot ) return '';
 	return isListContest(contest) ? S(
@@ -137,13 +137,16 @@ function contestBallot( contest, candidates$, choices$ ) {
 		'</div>'
 	) : S(
 		'<div class="">',
-			contestCandidates( ballot[candidates$] ),
+			contestCandidates( ballot[candidates$], runoff ),
 		'</div>'
 	);
 }
 
-function contestCandidates( candidates ) {
+function contestCandidates( candidates, runoff ) {
 	return S(
+		'<div>',
+			runoff && candidates.length == 4 ? T('egyptWarningTwo') : '',
+		'</div>',
 		'<div class="candidates">',
 			candidates.mapjoin( function( candidate ) {
 				var nick = candidate.nick_name ?

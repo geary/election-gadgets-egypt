@@ -15,6 +15,7 @@ loadStrings({
 "details": "Details", 
 "didNotFind": "We did not find that address. Please check the spelling and try again. Be sure to include your zip code or city and state.", 
 "doYouMean": "Do you mean:", 
+"egyptWarningTwo": "To avoid nullifying your vote, you must vote for only one professional candidate and another from the workers. Voting for two professionals or two workers nullifies your vote.", 
 "electionDate": "Election date:", 
 "electoralRollLabel": "Your electoral roll number:", 
 "forEligibleVoters": "This voting location is for eligible voters living at the home address shown above.", 
